@@ -38,7 +38,7 @@ while True:
     for i in range(len(banner) - 15):
         lcd.move_to(0, 1)
         lcd.putstr(banner[i:i+16])
-        time.sleep_ms(120)
+        time.sleep_ms(180)
 
     time.sleep(1)
 

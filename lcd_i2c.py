@@ -19,7 +19,12 @@ class LCD:
         time.sleep_ms(2)
 
     def _write_byte(self, val):
-        self.i2c.writeto(self.addr, bytes([val]))
+        for _ in range(3):
+            try:
+                self.i2c.writeto(self.addr, bytes([val]))
+                return
+            except OSError:
+                pass
 
     def _pulse(self, val):
         self._write_byte(val | 0x04)
@@ -57,9 +62,12 @@ class LCD:
         for c in s:
             self.write_char(ord(c))
 
+    def _pad(self, s):
+        s = s[:self.cols]
+        return s + ' ' * (self.cols - len(s))
+
     def show(self, line1="", line2=""):
-        self.clear()
         self.move_to(0, 0)
-        self.putstr(line1[:self.cols])
+        self.putstr(self._pad(line1))
         self.move_to(0, 1)
-        self.putstr(line2[:self.cols])
+        self.putstr(self._pad(line2))
