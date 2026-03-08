@@ -58,6 +58,11 @@ class LCD:
         addr = col + (0x40 if row else 0x00)
         self.cmd(0x80 | addr)
 
+    def custom_char(self, loc, charmap):
+        self.cmd(0x40 | (loc << 3))
+        for row in charmap:
+            self.write_char(row)
+
     def putstr(self, s):
         for c in s:
             self.write_char(ord(c))
